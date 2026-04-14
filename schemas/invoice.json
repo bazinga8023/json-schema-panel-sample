@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/invoice.json",
+  "title": "Invoice",
+  "type": "object",
+  "required": ["invoiceNumber", "customerId", "issuedAt", "currency", "lines"],
+  "properties": {
+    "invoiceNumber": {
+      "type": "string",
+      "pattern": "^INV-[0-9]{4}-[0-9]{6}$"
+    },
+    "customerId": {
+      "type": "string",
+      "pattern": "^cus_[A-Za-z0-9]+$"
+    },
+    "issuedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "dueAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "currency": {
+      "type": "string",
+      "enum": ["USD", "CNY", "EUR", "JPY"]
+    },
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["description", "quantity", "unitPrice"],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "unitPrice": {
+            "type": "number",
+            "minimum": 0
+          },
+          "taxRate": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "payment": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/cardPayment"
+        },
+        {
+          "$ref": "#/$defs/bankTransfer"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "cardPayment": {
+      "type": "object",
+      "required": ["method", "last4"],
+      "properties": {
+        "method": {
+          "const": "card"
+        },
+        "last4": {
+          "type": "string",
+          "pattern": "^[0-9]{4}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "bankTransfer": {
+      "type": "object",
+      "required": ["method", "bankCode"],
+      "properties": {
+        "method": {
+          "const": "bank_transfer"
+        },
+        "bankCode": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
