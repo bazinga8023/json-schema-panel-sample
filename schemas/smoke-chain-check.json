@@ -8,6 +8,13 @@
   "properties": {
     "id": {
       "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "passed"
+      ]
     }
   },
   "additionalProperties": false
