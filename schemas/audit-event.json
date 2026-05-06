@@ -3,18 +3,32 @@
   "$id": "https://example.com/schemas/audit-event.json",
   "title": "Audit Event",
   "type": "object",
-  "required": ["id", "actor", "action", "occurredAt", "target"],
+  "required": [
+    "actor",
+    "action",
+    "occurredAt",
+    "target",
+    "id"
+  ],
   "properties": {
     "id": {
+      "pattern": "^evt_[A-Za-z0-9]+$",
       "type": "string",
-      "pattern": "^evt_[A-Za-z0-9]+$"
+      "description": "唯一标识"
     },
     "actor": {
       "$ref": "#/$defs/principal"
     },
     "action": {
       "type": "string",
-      "enum": ["created", "updated", "deleted", "approved", "rejected", "exported"]
+      "enum": [
+        "created",
+        "updated",
+        "deleted",
+        "approved",
+        "rejected",
+        "exported"
+      ]
     },
     "occurredAt": {
       "type": "string",
@@ -22,7 +36,10 @@
     },
     "target": {
       "type": "object",
-      "required": ["type", "id"],
+      "required": [
+        "type",
+        "id"
+      ],
       "properties": {
         "type": {
           "type": "string"
@@ -56,11 +73,18 @@
   "$defs": {
     "principal": {
       "type": "object",
-      "required": ["type", "id"],
+      "required": [
+        "type",
+        "id"
+      ],
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["user", "service-account", "system"]
+          "enum": [
+            "user",
+            "service-account",
+            "system"
+          ]
         },
         "id": {
           "type": "string"
